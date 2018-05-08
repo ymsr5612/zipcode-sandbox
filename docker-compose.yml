@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+
+    datastore:
+      image: busybox
+      volumes:
+        - mysql-data:/var/lib/mysql
+
+    db:
+      image: mysql:5.7.10
+      environment:
+        - MYSQL_ROOT_PASSWORD=abc123
+        - MYSQL_USER=root
+        - MYSQL_DATABASE=zipcode-sandboc_development
+      ports:
+        - "3306:3306"
+      volumes_from:
+        - datastore
+
+volumes:
+  mysql-data:
+    driver: local
