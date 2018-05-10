@@ -142,3 +142,6 @@ bower.json
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+public/KEN_ALL.CSV
+public/ken_all.zip
