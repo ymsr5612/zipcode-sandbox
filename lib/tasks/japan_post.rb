@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'zip'
+require 'csv'
 
 class Tasks::JapanPost
 
@@ -7,6 +8,13 @@ class Tasks::JapanPost
     delete_files(['public/KEN_ALL.CSV', 'public/ken_all.zip'])
     download_and_save("public/", "http://www.post.japanpost.jp/zipcode/dl/oogaki/zip/ken_all.zip")
     unzip_file("public/", "ken_all.zip")
+    p 'public/ken_all.zipファイルの展開に成功しました。'
+  end
+
+  def self.update_zipcodes
+    csv_file_read("public/", "KEN_ALL.CSV").each do |csv|
+      p csv # この情報をDBに登録予定
+    end
   end
 
   private
@@ -35,4 +43,7 @@ class Tasks::JapanPost
       end
     end
 
+    def self.csv_file_read(dir_path, file_name)
+      CSV.read(dir_path + file_name, encoding: "CP932:UTF-8");
+    end
 end
