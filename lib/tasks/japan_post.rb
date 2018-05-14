@@ -13,8 +13,26 @@ class Tasks::JapanPost
 
   def self.update_zipcodes
     csv_file_read("public/", "KEN_ALL.CSV").each do |csv|
-      p csv # この情報をDBに登録予定
+      p csv
+      Yubin.create!({
+          local_governments_cd: csv[0],
+          past_zipcode: csv[1],
+          zipcode: csv[2],
+          region_kana: csv[3],
+          locality_kana: csv[4],
+          street_address_kana: csv[5],
+          region: csv[6],
+          locality: csv[7],
+          street_address: csv[8],
+          flag_1: csv[9],
+          flag_2: csv[10],
+          flag_3: csv[11],
+          flag_4: csv[12],
+          view_update: csv[13],
+          reason: csv[14]
+        })
     end
+    p "#{Yubin.all.length}を登録しました。"
   end
 
   private

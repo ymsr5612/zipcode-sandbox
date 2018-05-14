@@ -1,0 +1,2 @@
+class Yubin < ApplicationRecord
+end
