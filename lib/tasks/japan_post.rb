@@ -14,6 +14,8 @@ class Tasks::JapanPost
     def update_zipcodes
       yubins = []
       time = Benchmark.realtime do
+        Yubin.delete_all # ActiveRecordを返さずに削除するので効率がいい。
+        ActiveRecord::Base.connection.execute('ALTER TABLE yubins AUTO_INCREMENT = 1')
         csv_file_read("public/", "KEN_ALL.CSV").each do |csv|
           yubins << Yubin.new({
               local_governments_cd: csv[0],
@@ -35,7 +37,7 @@ class Tasks::JapanPost
         end
         Yubin.import yubins
       end
-      p "#{Yubin.all.length}を登録しました。#{time}"
+      p "#{Yubin.all.length}件を登録しました。#{time}"
     end
 
     private
