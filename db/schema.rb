@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2018_05_11_144137) do
 
-  create_table "yubins", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "yubins", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "local_governments_cd"
     t.string "past_zipcode"
     t.string "zipcode", null: false
