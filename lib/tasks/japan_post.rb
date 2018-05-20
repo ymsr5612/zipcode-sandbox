@@ -14,33 +14,42 @@ class Tasks::JapanPost
     def update_zipcodes
       yubins = []
       time = Benchmark.realtime do
-        Yubin.delete_all # ActiveRecordを返さずに削除するので効率がいい。
-        ActiveRecord::Base.connection.execute('ALTER TABLE yubins AUTO_INCREMENT = 1')
-        csv_file_read("public/", "KEN_ALL.CSV").each do |csv|
-          yubins << Yubin.new({
-              local_governments_cd: csv[0],
-              past_zipcode: csv[1],
-              zipcode: csv[2],
-              region_kana: csv[3],
-              locality_kana: csv[4],
-              street_address_kana: csv[5],
-              region: csv[6],
-              locality: csv[7],
-              street_address: csv[8],
-              flag_1: csv[9],
-              flag_2: csv[10],
-              flag_3: csv[11],
-              flag_4: csv[12],
-              view_update: csv[13],
-              reason: csv[14]
-            })
+        create_yubin_date yubins
+        ActiveRecord::Base.transaction do
+          Yubin.delete_all # ActiveRecordを返さずに削除するので効率がいい。
+          Yubin.import yubins
         end
-        Yubin.import yubins
       end
       p "#{Yubin.all.length}件を登録しました。#{time}"
     end
 
     private
+
+      def create_yubin_date(yubins)
+        csv_file_read("public/", "KEN_ALL.CSV").each do |csv|
+          add_yubin(yubins, csv)
+        end
+      end
+
+      def add_yubin(yubins, data)
+        yubins <<Yubin.new({
+            local_governments_cd: data[0],
+            past_zipcode: data[1],
+            zipcode: data[2],
+            region_kana: data[3],
+            locality_kana: data[4],
+            street_address_kana: data[5],
+            region: data[6],
+            locality: data[7],
+            street_address: data[8],
+            flag_1: data[9],
+            flag_2: data[10],
+            flag_3: data[11],
+            flag_4: data[12],
+            view_update: data[13],
+            reason: data[14]
+          })
+      end
 
       def delete_files(delete_files)
         delete_files.each do |file|
