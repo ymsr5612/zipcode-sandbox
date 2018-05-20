@@ -1,6 +1,7 @@
 class CreateYubins < ActiveRecord::Migration[5.2]
   def change
-    create_table :yubins do |t|
+    # マスターを毎回delete&insertするのでIDのオーバーフローを考えなくてもいいようにIDカラムは作らない
+    create_table :yubins, :id => false do |t|
       t.string    :local_governments_cd
       t.string    :past_zipcode
       t.string    :zipcode,             null: false, index: true
