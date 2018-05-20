@@ -8,4 +8,4 @@ json.set! :results do
 end
 json.count @yubins.length
 json.message @message ||= ''
-json.status 200
+json.status @status
