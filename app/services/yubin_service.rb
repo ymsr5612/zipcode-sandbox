@@ -2,23 +2,16 @@ class YubinService < BaseService
   attr_reader :zipcode,
               :yubins
 
-def initialize(zipcode, yubins)
-  @zipcode = zipcode
-  @yubins = yubins
-end
-
-private
-  def perform
-    street_address = ""
-    @yubins.each do |y|
-      street_address += y.street_address
-    end
-    yubin = {
-      :zipcode => @zipcode,
-      :region => yubins.first.region,
-      :locality => yubins.first.locality,
-      :street_address => street_address
-    }
-    [yubin]
+  def initialize(zipcode)
+    @zipcode = zipcode.to_s.tr('０-９', '0-9').sub(/[^0-9]/, '')
+    @yubins = Yubin.where(zipcode: @zipcode).order('street_address ASC')
   end
+
+  private
+    def perform
+      @yubins.each do |yubin|
+        yubin.street_address.sub!(/～.+$|（.+$|、.+$|以下に記載がない場合|^[0-9０-９].+$/,'')
+      end
+      @yubins
+    end
 end

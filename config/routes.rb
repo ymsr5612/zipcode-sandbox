@@ -7,5 +7,4 @@ Rails.application.routes.draw do
       get 'yubins/:id', to: 'yubin#search'
     end
   end
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
